@@ -67,13 +67,13 @@ button{padding:12px 20px;line-height:1.5}.opt{padding:14px 18px}.card>button,.ca
 <div><label>عنوان الدرس<input id="lesson"></label></div>
 <div><label>الصف<select id="grade"></select></label></div>
 <div><label>مستوى الصعوبة<select id="diff"><option value="easy">سهل</option><option value="mid">متوسط</option><option value="graded" selected>متدرج</option></select></label></div>
-<div><label>طريقة اللعب<select id="pm"><option value="two">فريقان يتنافسان</option><option value="single">لاعب واحد</option><option value="coop">تعاوني لفريق واحد</option><option value="online">أونلاين (لاعبان)</option></select></label></div>
+<div><label>طريقة اللعب<select id="pm"><option value="" disabled selected>اختر طريقة اللعب</option><option value="two">فريقان يتنافسان</option><option value="single">لاعب واحد</option><option value="coop">تعاوني لفريق واحد</option><option value="online">أونلاين (لاعبان)</option></select></label></div>
 <div><label>نمط اللعب<select id="mode"><option value="bridge">تحدي بناة الجسور</option><option value="tug">شد الحبل</option><option value="xo">XO التعليمية</option><option value="treasure">رحلة الكنز</option><option value="summit">سباق القمة</option><option value="wheel">عجلة التحديات</option><option value="snake">السلم والثعبان</option><option value="maze">متاهة المعرفة</option></select></label></div>
-<div><label>اسم الفريق الأول<input id="n1" value="مهندسو المستقبل"></label></div>
-<div class="t2"><label>اسم الفريق الثاني<input id="n2" value="بناة الغد"></label></div>
-<div><label>لون الفريق الأول (▲)<input type="color" id="c1" value="#1e5bd8"></label></div>
-<div class="t2"><label>لون الفريق الثاني (●)<input type="color" id="c2" value="#12a150"></label></div>
-<div><label>شخصية الفريق الأول<select id="a1"><option value="0" selected>👦 فتى (سترة زرقاء)</option><option value="1">👧 فتاة (فستان أسود)</option><option value="2">👦 فتى (سترة صفراء)</option><option value="3">🧕 فتاة (حجاب)</option></select></label><img id="pa1" class="pav" alt=""></div><div class="t2"><label>شخصية الفريق الثاني<select id="a2"><option value="0">👦 فتى (سترة زرقاء)</option><option value="1" selected>👧 فتاة (فستان أسود)</option><option value="2">👦 فتى (سترة صفراء)</option><option value="3">🧕 فتاة (حجاب)</option></select></label><img id="pa2" class="pav" alt=""></div>
+<div class="nm"><label><span id="ln1">اسم الفريق الأول</span> *<input id="n1" autocomplete="off"></label></div>
+<div class="t2 nm"><label><span id="ln2">اسم الفريق الثاني</span> *<input id="n2" autocomplete="off"></label></div>
+<div class="nm"><label>لون الفريق الأول (▲)<input type="color" id="c1" value="#1e5bd8"></label></div>
+<div class="t2 nm"><label>لون الفريق الثاني (●)<input type="color" id="c2" value="#12a150"></label></div>
+<div class="nm"><label>شخصية الفريق الأول<select id="a1"><option value="0" selected>👦 فتى (سترة زرقاء)</option><option value="1">👧 فتاة (فستان أسود)</option><option value="2">👦 فتى (سترة صفراء)</option><option value="3">🧕 فتاة (حجاب)</option></select></label><img id="pa1" class="pav" alt=""></div><div class="t2 nm"><label>شخصية الفريق الثاني<select id="a2"><option value="0">👦 فتى (سترة زرقاء)</option><option value="1" selected>👧 فتاة (فستان أسود)</option><option value="2">👦 فتى (سترة صفراء)</option><option value="3">🧕 فتاة (حجاب)</option></select></label><img id="pa2" class="pav" alt=""></div>
 <div><label>عدد الأسئلة<input type="number" id="count" value="10" min="3" max="60"></label></div>
 <div><label>مدة الجولة بالثواني (0 = بدون وقت)<input type="number" id="time" value="300" min="0"></label></div>
 </div>
@@ -103,8 +103,8 @@ const SAMPLE=[["mc","ما ناتج 5 + 7؟","12",["10","11","13"],"",1],["mc","�
 let Q=[],cfg={},S=null,edit=-1,ac=null,RND=Math.random;
 const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=RND()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const V=id=>$("#"+id).value;
-function readSettings(){return{pm:V("pm"),mode:V("mode"),subj:V("subj").trim(),lesson:V("lesson").trim(),grade:V("grade"),diff:V("diff"),n1:V("n1").trim()||"مهندسو المستقبل",n2:V("n2").trim()||"بناة الغد",c1:V("c1"),c2:V("c2"),a1:+V("a1"),a2:+V("a2"),count:Math.max(3,Math.min(60,+V("count")||10)),time:Math.max(0,+V("time")||0),sound:$("#snd").checked,rm:$("#rm").checked,fx:$("#fx").checked,retry:$("#retry").checked,summary:V("summary")}}
-function applySettings(c){for(const k in c){const e=$("#"+(k==="sound"?"snd":k==="rm"?"rm":k==="fx"?"fx":k==="retry"?"retry":k));if(!e)continue;if(e.type==="checkbox")e.checked=!!c[k];else e.value=c[k]}}
+function readSettings(){return{pm:V("pm"),mode:V("mode"),subj:V("subj").trim(),lesson:V("lesson").trim(),grade:V("grade"),diff:V("diff"),n1:V("n1").trim(),n2:V("n2").trim(),c1:V("c1"),c2:V("c2"),a1:+V("a1"),a2:+V("a2"),count:Math.max(3,Math.min(60,+V("count")||10)),time:Math.max(0,+V("time")||0),sound:$("#snd").checked,rm:$("#rm").checked,fx:$("#fx").checked,retry:$("#retry").checked,summary:V("summary")}}
+function applySettings(c){for(const k in c){if(k==="n1"||k==="n2"||k==="pm")continue;const e=$("#"+(k==="sound"?"snd":k==="rm"?"rm":k==="fx"?"fx":k==="retry"?"retry":k));if(!e)continue;if(e.type==="checkbox")e.checked=!!c[k];else e.value=c[k]}}
 const save=()=>{try{localStorage.setItem("abk2",JSON.stringify({cfg:readSettings()}))}catch(e){}};
 function initApp(){
  for(let i=1;i<=12;i++)$("#grade").add(new Option("الصف "+i,i));
@@ -117,9 +117,9 @@ function initApp(){
  $("#app").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.classList.contains("fill"))act({t:"a",i:+e.target.dataset.t,v:e.target.value})});
 }
 function pav(){$("#pa1").src=IMG[V("a1")];$("#pa2").src=IMG[V("a2")]}
-function updateGameMode(){const m=V("mode"),pmv=V("pm"),two=pmv==="two";$("#rule").textContent="قاعدة الفوز: "+MODES[m].r;document.querySelectorAll(".t2").forEach(e=>e.classList.toggle("hide",!two));$("#onl").classList.toggle("hide",pmv!=="online");if(pmv!=="online"&&ON)leaveOnline();goState();if(pmv==="online")startLobby();else stopLobby()}
+function updateGameMode(){const m=V("mode"),pmv=V("pm"),two=pmv==="two",LN={two:["اسم الفريق الأول","اسم الفريق الثاني"],single:["اسم اللاعب",""],coop:["اسم الفريق",""],online:["اسمك",""]}[pmv];if(LN){$("#ln1").textContent=LN[0];if(LN[1])$("#ln2").textContent=LN[1]}document.querySelectorAll(".nm").forEach(e=>e.style.display=pmv?"":"none");$("#rule").textContent="قاعدة الفوز: "+MODES[m].r;document.querySelectorAll(".t2").forEach(e=>e.classList.toggle("hide",!two));$("#onl").classList.toggle("hide",pmv!=="online");if(pmv!=="online"&&ON)leaveOnline();goState();if(pmv==="online")startLobby();else stopLobby()}
 function poolFor(){let p=Q.filter(q=>cfg.diff==="easy"?q.diff===1:cfg.diff==="mid"?q.diff===2:1),note="";if(p.length<3){p=Q.slice();note="عدد أسئلة هذا المستوى قليل؛ استُخدمت كل الأسئلة. "}return{pool:p,note}}
-function validate(){const{pool}=poolFor();if(pool.length<3)return"أضف 3 أسئلة على الأقل";if(cfg.mode==="maze"&&cfg.pm==="two")return"المتاهة تُلعب بفريق واحد (لاعب واحد أو تعاوني)";if(cfg.mode==="tug"&&cfg.pm!=="two")return"شد الحبل يحتاج فريقين";if(cfg.pm==="two"&&cfg.c1.toLowerCase()===cfg.c2.toLowerCase())return"اختر لونين مختلفين للفريقين";return""}
+function validate(){if(!cfg.pm)return"اختر طريقة اللعب أولًا";if(!cfg.n1)return"أدخل "+(cfg.pm==="single"?"اسم اللاعب":cfg.pm==="coop"?"اسم الفريق":"اسم الفريق الأول");if(cfg.pm==="two"&&!cfg.n2)return"أدخل اسم الفريق الثاني";const{pool}=poolFor();if(pool.length<3)return"أضف 3 أسئلة على الأقل";if(cfg.mode==="maze"&&cfg.pm==="two")return"المتاهة تُلعب بفريق واحد (لاعب واحد أو تعاوني)";if(cfg.mode==="tug"&&cfg.pm!=="two")return"شد الحبل يحتاج فريقين";if(cfg.pm==="two"&&cfg.c1.toLowerCase()===cfg.c2.toLowerCase())return"اختر لونين مختلفين للفريقين";return""}
 const seq=p=>cfg.diff==="graded"?sh(p).map((q,i)=>[q,i]).sort((a,b)=>a[0].diff-b[0].diff||a[1]-b[1]).map(x=>x[0]):sh(p);
 function show(id){["setup","game","result"].forEach(s=>$("#"+s).classList.toggle("hide",s!==id));scrollTo(0,0)}
 function startGame(remote){clearAllTimers();if(remote){cfg=remote.cfg;Q=remote.pool.map(q=>({type:q.type,text:q.text,correct:q.correct,wrong:q.wrong||[],exp:q.exp||"",diff:q.diff||2}));if(ON&&!ON.host){cfg.sound=$("#snd").checked;cfg.rm=$("#rm").checked;cfg.fx=$("#fx").checked}RND=mul(remote.seed)}else{cfg=readSettings();save();RND=Math.random}const e=validate();$("#err").textContent=e;if(e)return;
@@ -166,14 +166,16 @@ function onClick(e){const b=e.target.closest("button");if(!b||!S&&!b.dataset.a)r
  if(d.o!==undefined)act({t:"a",i:+d.t,v:d.o});else if(d.fill!==undefined)act({t:"a",i:+d.fill,v:$("#f"+d.fill).value});
  else if(d.c!==undefined)act({t:"c",c:+d.c,i:S.turn});else if(d.spin!==undefined)act({t:"s",i:S.turn});else if(d.roll!==undefined)act({t:"r",i:S.turn});
  else if(d.route!==undefined)act({t:"u",v:d.route});else if(d.hint!==undefined)act({t:"h",i:+d.hint});
- else if(d.a==="pause")act({t:"p"});else if(d.a==="restart"||d.a==="again"){if(!ON||ON.host)resetGame()}else if(d.a==="setup"){if(ON)leaveOnline();else{clearAllTimers();S=null;show("setup")}}}
+ else if(d.a==="pause")act({t:"p"});else if(d.a==="restart"||d.a==="again"){if(!ON||ON.host)resetGame()}else if(d.a==="exit")leaveOnline();else if(d.a==="setup"){if(ON)leaveOnline();else{clearAllTimers();S=null;show("setup")}}}
 function pauseGame(){if(S.over||S.paused)return;S.paused=true;clearInterval(S.timer);S.tos.forEach(clearTimeout);S.tos=[];renderGame()}
 function resumeGame(){S.paused=false;startTimer();const p=S.pend;S.pend={};for(const k in p)sched(k,p[k],500);renderGame()}
 function clearAllTimers(){if(S){clearInterval(S.timer);S.tos.forEach(clearTimeout);S.tos=[];S.pend={}}}
-function resetGame(){if(ON){if(ON.host)hostRun(ON.cfg0,ON.pool)}else startGame()}
+function resetGame(){if(ON){if(ON.host&&!ON.gone)hostRun(ON.cfg0,ON.pool)}else startGame()}
 function lane(t){const M=MODES[S.mode],n=S.goal;let c="";for(let i=0;i<n;i++){const f=i<t.pos;c+=M.k==="sum"?`<i class="cell st ${f?"f":""}" style="height:${24+i*7}px"></i>`:`<i class="cell ${f?"f":""}">${M.k==="tre"?i+1:""}</i>`}
  return`<div class="lane" style="--tc:${t.color}"><div class="cells">${c}</div><img class="ch" src="${t.img}" alt="" style="inset-inline-start:calc(${Math.min(t.pos,n)/n}*(100% - 100px))"><span class="goal">${M.k==="bri"?"🏁":M.k==="sum"?"🏆":"💎"}</span>${M.k==="bri"?'<div class="water"></div>':""}</div>`}
-function panel(t){if(ON&&t.id!==ON.me)return"";let b;if(t.finished)b=`<div class="q">🏁 أكمل المسار!</div>`;else{const c=t.cur,q=c.q;
+function oppBox(t){const f=t.fb;let m="⏳ يفكّر في السؤال…";if(t.finished)m="🏁 أكمل المسار";else if(f&&f.ok===true)m="✔ أجاب إجابة صحيحة";else if(f&&f.ok===false)m="✖ أجاب إجابة خاطئة";
+ return`<div style="--tc:${t.color}"><div class="ph" style="background:${t.color}"><span>${t.sym} ${esc(t.name)}</span><span>✔${t.correct} ✖${t.wrong} ★${t.score}</span></div><div class="pb"><div class="q">${m}</div></div></div>`}
+function panel(t){if(ON&&t.id!==ON.me)return oppBox(t);let b;if(t.finished)b=`<div class="q">🏁 أكمل المسار!</div>`;else{const c=t.cur,q=c.q;
  b=`<div class="q">${q.type==="why"&&!/^علل/.test(q.text)?"علّل: ":""}${esc(q.text)}</div>`;
  if(c.opts)b+=`<div class="opts">`+c.opts.map((o,i)=>{const k=t.locked&&t.fb&&t.fb.ok===false?(o.ok?" good":(o.id==t.fb.ch?" bad":"")):"";return`<button class="opt${k}" data-t="${t.id}" data-o="${o.id}" ${t.locked||S.paused||c.off.includes(o.id)?"disabled":""}>${i+1}. ${esc(o.text)}</button>`}).join("")+`</div>`;
  else b+=`<input class="fill" id="f${t.id}" data-t="${t.id}" autocomplete="off" aria-label="الإجابة" ${t.locked?"disabled":""}>`;
@@ -181,15 +183,15 @@ function panel(t){if(ON&&t.id!==ON.me)return"";let b;if(t.finished)b=`<div class
  const f=t.fb;if(f)b+=`<div class="fb ${f.ok?"ok":f.ok===false?"no":""}" role="status">${f.ok?"✨ ":""}${f.msg}${f.ans?" — الإجابة الصحيحة: "+esc(f.ans):""}${f.exp?"<br>"+esc(f.exp):""}</div>`}
  return`<div style="--tc:${t.color}"><div class="ph" style="background:${t.color}"><span>${t.sym} ${esc(t.name)}</span><span>✔${t.correct} ✖${t.wrong} ★${t.score}</span></div><div class="pb">${b}</div></div>`}
 function renderGame(){if(!S)return;const M=MODES[S.mode],T=S.teams;
- let h=`<div class="card bar"><b>${M.n}</b><span>${esc(cfg.subj||"—")} · ${esc(cfg.lesson||"—")} · الصف ${cfg.grade}</span><span class="timer">⏱ <b id="tm"></b></span><span><button data-a="pause">⏸ إيقاف مؤقت</button> ${ON&&!ON.host?"":'<button data-a="restart">↻ إعادة الجولة</button>'} <button data-a="setup">⚙ الإعدادات</button></span></div>`;
+ let h=`<div class="card bar"><b>${M.n}</b><span>${esc(cfg.subj||"—")} · ${esc(cfg.lesson||"—")} · الصف ${cfg.grade}</span><span class="timer">⏱ <b id="tm"></b></span><span><button data-a="pause">⏸ إيقاف مؤقت</button> ${ON&&!ON.host?"":'<button data-a="restart">↻ إعادة الجولة</button>'} ${ON?'<button data-a="exit">🚪 خروج</button>':'<button data-a="setup">⚙ الإعدادات</button>'}</span></div>`;
  if(S.note)h+=`<div class="card hint">${S.note}</div>`;
  let ps;
  if(S.mode==="xo"){const cur=T[S.turn];h+=`<div class="card"><div class="ban" style="color:${cur.color}">دور: ${cur.sym} ${esc(cur.name)}</div><div class="hint" style="text-align:center">${esc(S.msg||(cur.bot?"":"أجب عن السؤال أولًا"))}</div><div class="xo">`+S.board.map((v,i)=>`<button class="xc ${S.win&&S.win.line.includes(i)?"win":""}" data-c="${i}" aria-label="خانة ${i+1}" ${S.phase!=="place"||v!==null||S.paused||S.over||S.ending||(ON&&S.turn!==ON.me)?"disabled":""} style="color:${v!==null?T[v].color:"inherit"}">${v===null?"":v?"O":"X"}</button>`).join("")+`</div></div>`;ps=cur.bot?"":panel(cur)}
  else if(["wheel","snake","maze"].includes(S.mode)){const r=boardNew(T);h+=r.h;ps=r.ps}else if(S.mode==="tug"){h+=`<div class="card">${tugScene(T)}</div>`;ps=T.map(panel).join("")}
  else{h+=`<div class="card">${T.map(t=>`<div style="font-weight:800;color:${t.color}">${t.sym} ${esc(t.name)}: ${t.pos}/${S.goal}</div>`+scene(t)).join("")}</div>`;ps=T.map(panel).join("")}
  h+=`<div class="panels">${ps}</div>`;
- if(S.paused)h+=`<div class="ov"><div class="card"><h2>⏸ اللعبة متوقفة</h2><button class="pri" data-a="pause">▶ استئناف</button></div></div>`;
- $("#game").innerHTML=h;tm();if(S.mode==="snake")movePawns();else moveLane()}
+ if(S.paused&&!S.left)h+=`<div class="ov"><div class="card"><h2>⏸ اللعبة متوقفة</h2><button class="pri" data-a="pause">▶ استئناف</button></div></div>`;
+ if(S.left)h+=`<div class="ov"><div class="card"><h2>غادر اللاعب الآخر</h2><button class="pri" data-a="exit">العودة للإعدادات</button></div></div>`;$("#game").innerHTML=h;tm();if(S.mode==="snake")movePawns();else moveLane()}
 function finishGame(r){if(!S||S.over)return;clearAllTimers();S.over=true;const T=S.teams,K=S.mode==="wheel"?"score":S.mode==="snake"?"pos":"correct";let w=null,why="";
  if(S.mode==="xo"){if(S.win&&S.win.who>=0){w=S.win.who;why="اكتمل خط من ثلاث خانات"}else why=S.win?"امتلأت اللوحة دون فائز":"انتهى الوقت دون فائز"}
  else if(T.length===2){if(S.mode==="tug"){if(S.rope){w=S.rope>0?0:1;why=Math.abs(S.rope)>=5?"وصل الحبل إلى خط الفريق":"انتهى الوقت وتقدّمه أكبر"}}
@@ -201,7 +203,7 @@ function finishGame(r){if(!S||S.over)return;clearAllTimers();S.over=true;const T
  const fmt=s=>((s/60)|0)+":"+String(s%60).padStart(2,"0");
  const rows=T.filter(t=>!t.bot||S.mode==="xo").map(t=>{const pr=S.mode==="xo"?S.board.filter(v=>v===t.id).length+" خانات":S.mode==="tug"?Math.max(0,t.id?-S.rope:S.rope)+"/5":t.pos+"/"+S.goal;const pc=S.mode==="xo"||!S.goal?"—":Math.round(Math.min(1,(S.mode==="tug"?Math.max(0,t.id?-S.rope:S.rope):t.pos)/S.goal)*100)+"%";
   return`<tr style="color:${t.color}"><th>${t.sym} ${esc(t.name)}</th><td>${t.correct}</td><td>${t.wrong}</td><td>${t.score}</td><td>${pr}</td><td>${pc}</td><td>${fmt(t.time!==null?t.time:S.elapsed)}</td></tr>`}).join("");
- $("#result").innerHTML=`<div class="card"><div class="ban">${ban}</div><p style="text-align:center">${why?"السبب: "+why:""} · الزمن الكلي ${fmt(S.elapsed)}</p><div style="overflow-x:auto"><table class="tbl"><tr><th>الفريق</th><th>صحيحة</th><th>خاطئة</th><th>النقاط</th><th>التقدم</th><th>الإنجاز</th><th>الزمن</th></tr>${rows}</table></div><p style="text-align:center">${ON&&!ON.host?"":'<button class="pri" data-a="again">إعادة اللعب</button>'} <button data-a="setup">العودة للإعدادات</button></p></div>`;
+ $("#result").innerHTML=`<div class="card"><div class="ban">${ban}</div><p style="text-align:center">${why?"السبب: "+why:""} · الزمن الكلي ${fmt(S.elapsed)}</p><div style="overflow-x:auto"><table class="tbl"><tr><th>الفريق</th><th>صحيحة</th><th>خاطئة</th><th>النقاط</th><th>التقدم</th><th>الإنجاز</th><th>الزمن</th></tr>${rows}</table></div><p style="text-align:center">${ON&&(!ON.host||ON.gone)?"":'<button class="pri" data-a="again">إعادة اللعب</button>'} <button data-a="setup">العودة للإعدادات</button></p></div>`;
  show("result");beep(true)}
 
 const PH=["xo","snake","wheel","maze"],TURN=["xo","snake","wheel"];
@@ -272,19 +274,20 @@ let LOB=null;
 async function startLobby(){if(LOB||ON)return;try{await fbLoad()}catch(e){ost(e);return}if(V("pm")!=="online"||ON||LOB)return;LOB=DB.ref("lobby");LOB.on("value",s=>renderLobby(s.val()||{}))}
 function stopLobby(){if(LOB){LOB.off();LOB=null}const l=$("#olist");if(l)l.innerHTML=""}
 function renderLobby(v){const ks=Object.keys(v);$("#olist").innerHTML=ks.length?ks.map(k=>`<div class="qi"><span><b>${esc(v[k].n)}</b> · ${esc(v[k].lesson||"—")} · ${esc(MODES[v[k].mode]?MODES[v[k].mode].n:"")}</span><button data-j="${k}">انضمام</button></div>`).join(""):'<p class="hint">لا يوجد لاعبون ينتظرون الآن.</p>'}
+function oppLeft(){ost("غادر اللاعب الآخر.");ON.gone=true;if(S&&!S.over){clearAllTimers();S.left=true;S.paused=true;renderGame()}else if(S)renderGame()}
 function onlClick(e){const b=e.target.closest("button");if(!b)return;const d=b.dataset;if(d.j)onJoin(d.j);else if(d.acc)accept(d.acc);else if(d.rej)reject(d.rej);else if(d.cancel)leaveOnline()}
 function showHost(){if(!ON||!ON.host||ON.guest)return;const q=ON.reqs||{},ks=Object.keys(q);ost("بانتظار لاعب… ستظهر طلبات الانضمام هنا."+ks.map(k=>`<div class="qi"><span><b>${esc(q[k].n)}</b> يريد اللعب معك</span><button data-acc="${k}">قبول</button><button data-rej="${k}">رفض</button></div>`).join("")+'<div><button data-cancel="1">إلغاء الانتظار</button></div>')}
-async function onCreate(){if(ON)leaveOnline(true);try{await fbLoad()}catch(e){ost(e);return}stopLobby();
+async function onCreate(){if(!V("n1").trim()){ost("أدخل اسمك أولًا في خانة الاسم");return}if(ON)leaveOnline(true);try{await fbLoad()}catch(e){ost(e);return}stopLobby();
  const id=DB.ref("rooms").push().key,ref=DB.ref("rooms/"+id),lob=DB.ref("lobby/"+id);
  await ref.set({t:Date.now()});await lob.set({n:V("n1").trim()||"لاعب",lesson:V("lesson").trim()||V("subj").trim(),mode:V("mode"),t:Date.now()});
  ref.onDisconnect().remove();lob.onDisconnect().remove();ON={host:true,me:0,id,ref,lob,run:-1,lastRun:0,offs:[],roff:[],reqs:{}};goState();showHost();
  const rq=ref.child("req"),f1=rq.on("value",s=>{if(!ON)return;ON.reqs=s.val()||{};showHost()});ON.offs.push(()=>rq.off("value",f1));
- const gu=ref.child("guest"),f2=gu.on("value",s=>{if(ON&&ON.started&&!s.exists())ost("غادر اللاعب الآخر.")});ON.offs.push(()=>gu.off("value",f2))}
+ const gu=ref.child("guest"),f2=gu.on("value",s=>{if(ON&&ON.started&&!s.exists())oppLeft()});ON.offs.push(()=>gu.off("value",f2))}
 async function accept(k){const r=ON&&ON.host&&ON.reqs[k];if(!r||ON.guest)return;ON.guest={n:r.n,a:r.a,k};await ON.ref.child("guest").set(ON.guest);ON.lob.remove();
  Object.keys(ON.reqs).forEach(o=>{if(o!==k)ON.ref.child("rej/"+o).set(1)});ON.ref.child("req").remove();ost("تمت الموافقة، تبدأ اللعبة…");
  const c=readSettings();c.pm="two";c.n2=ON.guest.n;c.a2=+ON.guest.a;hostRun(c,Q)}
 function reject(k){if(ON&&ON.host){ON.ref.child("rej/"+k).set(1);ON.ref.child("req/"+k).remove()}}
-async function onJoin(id){if(ON)leaveOnline(true);try{await fbLoad()}catch(e){ost(e);return}stopLobby();
+async function onJoin(id){if(!V("n1").trim()){ost("أدخل اسمك أولًا في خانة الاسم");return}if(ON)leaveOnline(true);try{await fbLoad()}catch(e){ost(e);return}stopLobby();
  const ref=DB.ref("rooms/"+id),sn=await ref.child("t").once("value");if(!sn.exists()){ost("لم يعد هذا اللاعب متاحًا.");startLobby();return}
  const key=ref.child("req").push().key;ON={host:false,me:1,id,ref,run:-1,offs:[],roff:[],key};goState();
  const rq=ref.child("req/"+key);await rq.set({n:V("n1").trim()||"اللاعب الثاني",a:+V("a1")});rq.onDisconnect().remove();
@@ -312,7 +315,7 @@ function applyAct(a){if(!S)return;switch(a.t){
  case"s":if(S.turn===a.i)spin();break;case"r":if(S.turn===a.i)roll();break;case"u":routeSel(a.v);break;case"h":doHint(a.i);break;
  case"p":S.paused?resumeGame():pauseGame();break;case"tick":tick();break;
  case"f":{const f=S.pend[a.k];if(f){delete S.pend[a.k];f()}break}}}
-function leaveOnline(keep,msg){if(ON){ON.offs.concat(ON.roff||[]).forEach(f=>f());try{if(ON.host){ON.ref.remove();ON.lob.remove()}else{ON.ref.child("req/"+ON.key).remove();ON.ref.child("guest").remove()}}catch(e){}}ON=null;clearAllTimers();S=null;RND=Math.random;goState();if(!keep)show("setup");else if(msg){show("setup");ost(msg)}if(V("pm")==="online")startLobby()}
+function leaveOnline(keep,msg){if(ON){ON.offs.concat(ON.roff||[]).forEach(f=>f());try{if(ON.host){ON.ref.remove();ON.lob.remove()}else{ON.ref.child("req/"+ON.key).remove();if(ON.acc)ON.ref.child("guest").remove()}}catch(e){}}ON=null;clearAllTimers();S=null;RND=Math.random;goState();if(!keep)show("setup");else if(msg){show("setup");ost(msg)}if(V("pm")==="online")startLobby()}
 function boardNew(T){const cur=T[S.turn],q=S.phase==="q",sc=`<div class="hint" style="text-align:center">`+T.map(t=>`<b style="color:${t.color}">${t.sym} ${esc(t.name)} ★${t.score}</b>`).join(" · ")+`</div>`;let h="",ps="";
  if(S.mode==="wheel"){const L=["سهل","متوسط","صعب"];
   h=`<div class="card" style="text-align:center"><div class="ban" style="color:${cur.color}">دور: ${cur.sym} ${esc(cur.name)} · الجولة ${(cur.rounds||0)+1}/${S.rounds}</div><div class="wheelw"><div class="ptr">▼</div><div id="wheel" class="wheel" style="transform:rotate(${S.rot}deg)">${[0,1,2,3,4,5].map(i=>`<b style="transform:translate(-50%,-50%) rotate(${i*60+30}deg) translateY(-92px)${i*60+30>100&&i*60+30<260?" rotate(180deg)":""}">${L[i%3]}<br>${(i%3+1)*10}</b>`).join("")}</div></div>`+(S.phase==="spin"?`<button class="pri" data-spin ${S.paused||(ON&&S.turn!==ON.me)?"disabled":""}>🎡 أدر العجلة</button>`:S.phase==="spinning"?"<p>تدور…</p>":`<p class="hint">${L[S.seg%3]}: ${(S.seg%3+1)*10} نقاط</p>`)+sc+`</div>`;ps=q?panel(cur):""}
